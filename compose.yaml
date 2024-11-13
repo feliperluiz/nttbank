@@ -1,6 +1,7 @@
 services:
   postgres:
     image: 'postgres:latest'
+    container_name: 'nttbank-postgres'
     environment:
       - 'POSTGRES_DB=nttbank'
       - 'POSTGRES_PASSWORD=nttbank'
@@ -11,3 +12,6 @@ services:
       - 'postgres_data:/var/lib/postgresql/data'
 volumes:
   postgres_data:
+networks:
+  springboot-network:
+    driver: bridge
