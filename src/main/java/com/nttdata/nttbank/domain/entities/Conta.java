@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @AllArgsConstructor
 @Getter
 @Setter
@@ -17,7 +19,7 @@ public class Conta {
     private String agencia;
     private String conta;
     private String dac;
-    private String saldo;
+    private BigDecimal saldo;
     private TipoConta tipoConta;
     private Boolean bloqueada;
 }

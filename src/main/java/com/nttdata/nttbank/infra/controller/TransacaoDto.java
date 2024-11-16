@@ -1,4 +1,14 @@
 package com.nttdata.nttbank.infra.controller;
 
-public record TransacaoDto() {
-}
+import com.nttdata.nttbank.infra.persistence.enums.TipoDespesa;
+import com.nttdata.nttbank.infra.persistence.enums.TipoOperacao;
+
+import java.math.BigDecimal;
+
+public record TransacaoDto(
+    Long contaId,
+    BigDecimal valor,
+    String descricao,
+    TipoOperacao tipoOperacao,
+    Long contaIdTransferencia,
+    TipoDespesa tipoDespesa){}

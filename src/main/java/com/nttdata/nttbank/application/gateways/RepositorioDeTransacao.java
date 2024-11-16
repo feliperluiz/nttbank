@@ -1,6 +1,5 @@
 package com.nttdata.nttbank.application.gateways;
 
-import com.nttdata.nttbank.domain.entities.Conta;
 import com.nttdata.nttbank.domain.entities.Transacao;
 
 import java.util.List;

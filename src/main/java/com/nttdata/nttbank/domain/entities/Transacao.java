@@ -23,5 +23,7 @@ public class Transacao {
 
     private TipoOperacao tipoOperacao;
 
+    private Long contaIdTransferencia;
+
     private TipoDespesa tipoDespesa;
 }
