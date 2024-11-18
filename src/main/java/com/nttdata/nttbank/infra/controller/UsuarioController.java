@@ -1,7 +1,8 @@
 package com.nttdata.nttbank.infra.controller;
 
-import com.nttdata.nttbank.application.usecases.*;
+import com.nttdata.nttbank.application.usecases.usuario.*;
 import com.nttdata.nttbank.domain.entities.Usuario;
+import com.nttdata.nttbank.infra.controller.dto.UsuarioDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

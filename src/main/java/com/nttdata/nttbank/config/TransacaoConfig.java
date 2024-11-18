@@ -1,7 +1,10 @@
 package com.nttdata.nttbank.config;
 
 import com.nttdata.nttbank.application.gateways.RepositorioDeTransacao;
-import com.nttdata.nttbank.application.usecases.*;
+import com.nttdata.nttbank.application.usecases.transacao.AlterarTransacao;
+import com.nttdata.nttbank.application.usecases.transacao.CriarTransacao;
+import com.nttdata.nttbank.application.usecases.transacao.ListarTransacoes;
+import com.nttdata.nttbank.application.usecases.transacao.RemoverTransacao;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

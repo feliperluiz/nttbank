@@ -1,11 +1,11 @@
 package com.nttdata.nttbank.infra.controller;
 
-import com.nttdata.nttbank.application.usecases.AlterarTransacao;
-import com.nttdata.nttbank.application.usecases.CriarTransacao;
-import com.nttdata.nttbank.application.usecases.ListarTransacoes;
-import com.nttdata.nttbank.application.usecases.RemoverTransacao;
+import com.nttdata.nttbank.application.usecases.transacao.AlterarTransacao;
+import com.nttdata.nttbank.application.usecases.transacao.CriarTransacao;
+import com.nttdata.nttbank.application.usecases.transacao.ListarTransacoes;
+import com.nttdata.nttbank.application.usecases.transacao.RemoverTransacao;
 import com.nttdata.nttbank.domain.entities.Transacao;
-import lombok.AllArgsConstructor;
+import com.nttdata.nttbank.infra.controller.dto.TransacaoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

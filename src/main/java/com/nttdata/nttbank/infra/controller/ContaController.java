@@ -1,11 +1,11 @@
 package com.nttdata.nttbank.infra.controller;
 
-import com.nttdata.nttbank.application.usecases.AlterarConta;
-import com.nttdata.nttbank.application.usecases.CriarConta;
-import com.nttdata.nttbank.application.usecases.ListarContas;
-import com.nttdata.nttbank.application.usecases.RemoverConta;
+import com.nttdata.nttbank.application.usecases.conta.AlterarConta;
+import com.nttdata.nttbank.application.usecases.conta.CriarConta;
+import com.nttdata.nttbank.application.usecases.conta.ListarContas;
+import com.nttdata.nttbank.application.usecases.conta.RemoverConta;
 import com.nttdata.nttbank.domain.entities.Conta;
-import lombok.AllArgsConstructor;
+import com.nttdata.nttbank.infra.controller.dto.ContaDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

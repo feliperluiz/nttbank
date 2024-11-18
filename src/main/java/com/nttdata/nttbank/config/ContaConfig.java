@@ -1,8 +1,10 @@
 package com.nttdata.nttbank.config;
 
 import com.nttdata.nttbank.application.gateways.RepositorioDeConta;
-import com.nttdata.nttbank.application.gateways.RepositorioDeTransacao;
-import com.nttdata.nttbank.application.usecases.*;
+import com.nttdata.nttbank.application.usecases.conta.AlterarConta;
+import com.nttdata.nttbank.application.usecases.conta.CriarConta;
+import com.nttdata.nttbank.application.usecases.conta.ListarContas;
+import com.nttdata.nttbank.application.usecases.conta.RemoverConta;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

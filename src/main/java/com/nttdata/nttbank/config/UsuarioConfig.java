@@ -1,7 +1,7 @@
 package com.nttdata.nttbank.config;
 
 import com.nttdata.nttbank.application.gateways.RepositorioDeUsuario;
-import com.nttdata.nttbank.application.usecases.*;
+import com.nttdata.nttbank.application.usecases.usuario.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
