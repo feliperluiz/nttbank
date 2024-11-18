@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 @Builder
 public class Conta {
 
+    private Long id;
     private Long usuarioId;
     private String agencia;
     private String conta;

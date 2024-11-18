@@ -15,6 +15,8 @@ import java.math.BigDecimal;
 @Builder
 public class Transacao {
 
+    private Long id;
+
     private Long contaId;
 
     private BigDecimal valor;

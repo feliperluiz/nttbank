@@ -33,7 +33,7 @@ public class TransacaoEntity {
     @Enumerated
     private TipoOperacao tipoOperacao;
 
-    @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "contaIdTransferencia", referencedColumnName = "id")
     private ContaEntity contaTransferencia;
 

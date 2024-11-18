@@ -6,12 +6,12 @@ import com.nttdata.nttbank.infra.persistence.UsuarioEntity;
 public class UsuarioEntityMapper {
 
     public UsuarioEntity toEntity(Usuario usuario){
-        return new UsuarioEntity(null, usuario.getCpf(), usuario.getNome(),
+        return new UsuarioEntity(usuario.getId(), usuario.getCpf(), usuario.getNome(),
                 usuario.getLogin(), usuario.getNascimento(), usuario.getEmail());
     }
 
     public Usuario toDomain(UsuarioEntity entity){
-        return new Usuario(entity.getCpf(), entity.getNome(), entity.getLogin(),
+        return new Usuario(entity.getId(), entity.getCpf(), entity.getNome(), entity.getLogin(),
                 entity.getNascimento(), entity.getEmail());
     }
 }

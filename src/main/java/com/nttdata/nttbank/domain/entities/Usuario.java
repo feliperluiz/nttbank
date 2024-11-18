@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @Builder
 public class Usuario {
 
+    private Long id;
     private String cpf;
     private String nome;
     private String login;
