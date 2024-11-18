@@ -6,18 +6,17 @@ import com.nttdata.nttbank.infra.gateways.mapper.TransacaoEntityMapper;
 import com.nttdata.nttbank.infra.persistence.entities.TransacaoEntity;
 import com.nttdata.nttbank.infra.persistence.repository.TransacaoRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@AllArgsConstructor
 public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
 
-    @Autowired
-    private TransacaoRepository repositorio;
+    private final TransacaoRepository repositorio;
 
-    @Autowired
-    private TransacaoEntityMapper mapper;
+    private final TransacaoEntityMapper mapper;
 
     @Override
     public Transacao criarTransacao(Transacao transacao) {

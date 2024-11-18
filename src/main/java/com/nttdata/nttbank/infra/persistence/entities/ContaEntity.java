@@ -21,7 +21,6 @@ public class ContaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuarioId", referencedColumnName = "id")
     private UsuarioEntity usuario;

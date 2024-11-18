@@ -6,19 +6,19 @@ import com.nttdata.nttbank.infra.gateways.mapper.ContaEntityMapper;
 import com.nttdata.nttbank.infra.persistence.entities.ContaEntity;
 import com.nttdata.nttbank.infra.persistence.repository.ContaRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@AllArgsConstructor
 public class RepositorioDeContaJpa implements RepositorioDeConta {
 
-    @Autowired
-    private ContaRepository repositorio;
+    private final ContaRepository repositorio;
 
-    @Autowired
-    private ContaEntityMapper mapper;
+    private final ContaEntityMapper mapper;
 
     @Override
     public Conta criarConta(Conta conta) {

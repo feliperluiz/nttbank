@@ -2,6 +2,9 @@ package com.nttdata.nttbank.config;
 
 import com.nttdata.nttbank.application.gateways.RepositorioDeUsuario;
 import com.nttdata.nttbank.application.usecases.usuario.*;
+import com.nttdata.nttbank.infra.gateways.jpa.RepositorioDeUsuarioJpa;
+import com.nttdata.nttbank.infra.gateways.mapper.UsuarioEntityMapper;
+import com.nttdata.nttbank.infra.persistence.repository.UsuarioRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -31,5 +34,15 @@ public class UsuarioConfig {
     @Bean
     ImportarUsuariosExcel importarUsuariosExcel(RepositorioDeUsuario repositorioDeUsuario){
         return new ImportarUsuariosExcel(repositorioDeUsuario);
+    }
+
+    @Bean
+    RepositorioDeUsuarioJpa criarRepositorioUsuario(UsuarioRepository repositorio, UsuarioEntityMapper mapper){
+        return new RepositorioDeUsuarioJpa(repositorio, mapper);
+    }
+
+    @Bean
+    UsuarioEntityMapper retornaMapperUsuario(){
+        return new UsuarioEntityMapper();
     }
 }

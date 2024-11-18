@@ -6,7 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.0-RC1</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>com.nttdata</groupId>
 	<artifactId>nttbank</artifactId>
@@ -65,7 +65,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.30</version> <!-- Substitua pela versão mais recente -->
+			<version>1.18.30</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

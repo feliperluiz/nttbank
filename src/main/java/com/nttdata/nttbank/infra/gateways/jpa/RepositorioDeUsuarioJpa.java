@@ -6,19 +6,19 @@ import com.nttdata.nttbank.infra.gateways.mapper.UsuarioEntityMapper;
 import com.nttdata.nttbank.infra.persistence.entities.UsuarioEntity;
 import com.nttdata.nttbank.infra.persistence.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@AllArgsConstructor
 public class RepositorioDeUsuarioJpa implements RepositorioDeUsuario {
 
-    @Autowired
-    private UsuarioRepository repositorio;
+    private final UsuarioRepository repositorio;
 
-    @Autowired
-    private UsuarioEntityMapper mapper;
+    private final UsuarioEntityMapper mapper;
 
     @Override
     public Usuario criarUsuario(Usuario usuario) {

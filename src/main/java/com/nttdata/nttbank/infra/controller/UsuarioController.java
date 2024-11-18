@@ -29,30 +29,28 @@ public class UsuarioController {
     @Autowired
     private ImportarUsuariosExcel importarUsuariosExcel;
 
-    @PostMapping
+    @PostMapping("/criar")
     public UsuarioDto criarUsuario(@RequestBody UsuarioDto dto) {
         Usuario salvo = criarUsuario.criarUsuario(new Usuario(null, dto.cpf(), dto.nome(), dto.login(), dto.nascimento(), dto.email()));
         return new UsuarioDto(salvo.getCpf(), salvo.getNome(), salvo.getLogin(), salvo.getNascimento(), salvo.getEmail());
     }
 
-    @GetMapping
+    @GetMapping("/listar")
     public List<UsuarioDto> listarUsuarios() {
         return listarUsuarios.listarUsuarios().stream()
                 .map(u -> new UsuarioDto(u.getCpf(), u.getNome(), u.getLogin(), u.getNascimento(), u.getEmail()))
                 .collect(Collectors.toList());
     }
 
-    @PutMapping
+    @PutMapping("/alterar")
     public UsuarioDto alterarUsuario(@RequestBody UsuarioDto dto) {
         Usuario salvo = alterarUsuario.alterarUsuario(new Usuario(null, dto.cpf(), dto.nome(), dto.login(), dto.nascimento(), dto.email()));
         return new UsuarioDto(salvo.getCpf(), salvo.getNome(), salvo.getLogin(), salvo.getNascimento(), salvo.getEmail());
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> removerUsuario(@PathVariable Long id) {
+    @DeleteMapping("/remover/{id}")
+    public ResponseEntity<Void> removerUsuario(@PathVariable("id") Long id) {
         removerUsuario.removerUsuario(id);
         return ResponseEntity.noContent().build();
     }
-
-
 }

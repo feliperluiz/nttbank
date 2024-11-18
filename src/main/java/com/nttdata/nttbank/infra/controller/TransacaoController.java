@@ -28,27 +28,27 @@ public class TransacaoController {
     @Autowired
     private RemoverTransacao removerTransacao;
 
-    @PostMapping
+    @PostMapping("/criar")
     public TransacaoDto criarTransacao(@RequestBody TransacaoDto dto) {
         Transacao salvo = criarTransacao.criarTransacao(new Transacao(null, dto.contaId(), dto.valor(), dto.descricao(), dto.tipoOperacao(), dto.contaIdTransferencia(), dto.tipoDespesa()));
         return new TransacaoDto(salvo.getId(), salvo.getContaId(), salvo.getValor(), salvo.getDescricao(), salvo.getTipoOperacao(), salvo.getContaIdTransferencia(), salvo.getTipoDespesa());
     }
 
-    @GetMapping
+    @GetMapping("/listar")
     public List<TransacaoDto> listarTransacoes() {
         return listarTransacoes.listarTransacoes().stream()
                 .map(u -> new TransacaoDto(u.getId(), u.getContaId(), u.getValor(), u.getDescricao(), u.getTipoOperacao(), u.getContaIdTransferencia(), u.getTipoDespesa()))
                 .collect(Collectors.toList());
     }
 
-    @PutMapping
+    @PutMapping("/alterar")
     public TransacaoDto alterarTransacao(@RequestBody TransacaoDto dto) {
         Transacao salvo = alterarTransacao.alterarTransacao(new Transacao(null, dto.contaId(), dto.valor(), dto.descricao(), dto.tipoOperacao(), dto.contaIdTransferencia(), dto.tipoDespesa()));
         return new TransacaoDto(salvo.getId(), salvo.getContaId(), salvo.getValor(), salvo.getDescricao(), salvo.getTipoOperacao(), salvo.getContaIdTransferencia(), salvo.getTipoDespesa());
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> removerTransacao(@PathVariable Long id) {
+    @DeleteMapping("/remover/{id}")
+    public ResponseEntity<Void> removerTransacao(@PathVariable("id") Long id) {
         removerTransacao.removerTransacao(id);
         return ResponseEntity.noContent().build();
     }

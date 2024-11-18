@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/conta")
+@RequestMapping("/contas")
 public class ContaController {
 
     @Autowired
@@ -29,27 +29,27 @@ public class ContaController {
     @Autowired
     private AlterarConta alterarConta;
 
-    @PostMapping
+    @PostMapping("/criar")
     public ContaDto criarConta(@RequestBody ContaDto dto) {
         Conta salvo = criarConta.criarConta(new Conta(null, dto.usuarioId(), dto.agencia(), dto.conta(), dto.dac(), dto.saldo(), dto.tipoConta(), dto.bloqueada()));
         return new ContaDto(salvo.getId(), salvo.getUsuarioId(), salvo.getAgencia(), salvo.getConta(), salvo.getDac(), salvo.getSaldo(), salvo.getTipoConta(), salvo.getBloqueada());
     }
 
-    @GetMapping
+    @GetMapping("/listar")
     public List<ContaDto> listarContas() {
         return listarContas.listarContas().stream()
                 .map(u -> new ContaDto(u.getId(), u.getUsuarioId(), u.getAgencia(), u.getConta(), u.getDac(), u.getSaldo(), u.getTipoConta(), u.getBloqueada()))
                 .collect(Collectors.toList());
     }
 
-    @PutMapping
+    @PutMapping("/alterar")
     public ContaDto alterarConta(@RequestBody ContaDto dto) {
         Conta salvo = alterarConta.alterarConta(new Conta(dto.id(), dto.usuarioId(), dto.agencia(), dto.conta(), dto.dac(), dto.saldo(), dto.tipoConta(), dto.bloqueada()));
         return new ContaDto(salvo.getId(), salvo.getUsuarioId(), salvo.getAgencia(), salvo.getConta(), salvo.getDac(), salvo.getSaldo(), salvo.getTipoConta(), salvo.getBloqueada());
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> removerConta(@PathVariable Long id) {
+    @DeleteMapping("/remover/{id}")
+    public ResponseEntity<Void> removerConta(@PathVariable("id") Long id) {
         removerConta.removerConta(id);
         return ResponseEntity.noContent().build();
     }
