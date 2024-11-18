@@ -5,7 +5,7 @@ import com.nttdata.nttbank.infra.persistence.enums.TipoOperacao;
 
 import java.math.BigDecimal;
 
-public record TransacaoDto(
+public record TransacaoDto(Long id,
     Long contaId,
     BigDecimal valor,
     String descricao,

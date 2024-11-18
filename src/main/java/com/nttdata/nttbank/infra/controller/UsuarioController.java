@@ -30,7 +30,7 @@ public class UsuarioController {
 
     @PostMapping
     public UsuarioDto criarUsuario(@RequestBody UsuarioDto dto) {
-        Usuario salvo = criarUsuario.criarUsuario(new Usuario(dto.cpf(), dto.nome(), dto.login(), dto.nascimento(), dto.email()));
+        Usuario salvo = criarUsuario.criarUsuario(new Usuario(null, dto.cpf(), dto.nome(), dto.login(), dto.nascimento(), dto.email()));
         return new UsuarioDto(salvo.getCpf(), salvo.getNome(), salvo.getLogin(), salvo.getNascimento(), salvo.getEmail());
     }
 
@@ -43,7 +43,7 @@ public class UsuarioController {
 
     @PutMapping
     public UsuarioDto alterarUsuario(@RequestBody UsuarioDto dto) {
-        Usuario salvo = alterarUsuario.alterarUsuario(new Usuario(dto.cpf(), dto.nome(), dto.login(), dto.nascimento(), dto.email()));
+        Usuario salvo = alterarUsuario.alterarUsuario(new Usuario(null, dto.cpf(), dto.nome(), dto.login(), dto.nascimento(), dto.email()));
         return new UsuarioDto(salvo.getCpf(), salvo.getNome(), salvo.getLogin(), salvo.getNascimento(), salvo.getEmail());
     }
 

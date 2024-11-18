@@ -30,21 +30,21 @@ public class TransacaoController {
 
     @PostMapping
     public TransacaoDto criarTransacao(@RequestBody TransacaoDto dto) {
-        Transacao salvo = criarTransacao.criarTransacao(new Transacao(dto.contaId(), dto.valor(), dto.descricao(), dto.tipoOperacao(), dto.contaIdTransferencia(), dto.tipoDespesa()));
-        return new TransacaoDto(salvo.getContaId(), salvo.getValor(), salvo.getDescricao(), salvo.getTipoOperacao(), salvo.getContaIdTransferencia(), salvo.getTipoDespesa());
+        Transacao salvo = criarTransacao.criarTransacao(new Transacao(null, dto.contaId(), dto.valor(), dto.descricao(), dto.tipoOperacao(), dto.contaIdTransferencia(), dto.tipoDespesa()));
+        return new TransacaoDto(salvo.getId(), salvo.getContaId(), salvo.getValor(), salvo.getDescricao(), salvo.getTipoOperacao(), salvo.getContaIdTransferencia(), salvo.getTipoDespesa());
     }
 
     @GetMapping
     public List<TransacaoDto> listarTransacoes() {
         return listarTransacoes.listarTransacoes().stream()
-                .map(u -> new TransacaoDto(u.getContaId(), u.getValor(), u.getDescricao(), u.getTipoOperacao(), u.getContaIdTransferencia(), u.getTipoDespesa()))
+                .map(u -> new TransacaoDto(u.getId(), u.getContaId(), u.getValor(), u.getDescricao(), u.getTipoOperacao(), u.getContaIdTransferencia(), u.getTipoDespesa()))
                 .collect(Collectors.toList());
     }
 
     @PutMapping
     public TransacaoDto alterarTransacao(@RequestBody TransacaoDto dto) {
-        Transacao salvo = alterarTransacao.alterarTransacao(new Transacao(dto.contaId(), dto.valor(), dto.descricao(), dto.tipoOperacao(), dto.contaIdTransferencia(), dto.tipoDespesa()));
-        return new TransacaoDto(salvo.getContaId(), salvo.getValor(), salvo.getDescricao(), salvo.getTipoOperacao(), salvo.getContaIdTransferencia(), salvo.getTipoDespesa());
+        Transacao salvo = alterarTransacao.alterarTransacao(new Transacao(null, dto.contaId(), dto.valor(), dto.descricao(), dto.tipoOperacao(), dto.contaIdTransferencia(), dto.tipoDespesa()));
+        return new TransacaoDto(salvo.getId(), salvo.getContaId(), salvo.getValor(), salvo.getDescricao(), salvo.getTipoOperacao(), salvo.getContaIdTransferencia(), salvo.getTipoDespesa());
     }
 
     @DeleteMapping
