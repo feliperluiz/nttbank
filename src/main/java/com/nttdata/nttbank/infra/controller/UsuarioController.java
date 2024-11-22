@@ -4,8 +4,12 @@ import com.nttdata.nttbank.application.usecases.usuario.*;
 import com.nttdata.nttbank.domain.entities.Usuario;
 import com.nttdata.nttbank.infra.controller.dto.UsuarioDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,5 +56,17 @@ public class UsuarioController {
     public ResponseEntity<Void> removerUsuario(@PathVariable("id") Long id) {
         removerUsuario.removerUsuario(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/upload")
+    public List<UsuarioDto> uploadExcel(@RequestParam("file") MultipartFile file) {
+        try {
+            List<Usuario> usuarios = importarUsuariosExcel.importarUsuariosExcel(file);
+            return usuarios.stream()
+                    .map(u -> new UsuarioDto(u.getCpf(), u.getNome(), u.getLogin(), u.getNascimento(), u.getEmail()))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(500), "Erro ao importar arquivo");
+        }
     }
 }

@@ -2,13 +2,27 @@ package com.nttdata.nttbank.infra.gateways.jpa;
 
 import com.nttdata.nttbank.application.gateways.RepositorioDeUsuario;
 import com.nttdata.nttbank.domain.entities.Usuario;
+import com.nttdata.nttbank.infra.controller.dto.UsuarioDto;
 import com.nttdata.nttbank.infra.gateways.mapper.UsuarioEntityMapper;
 import com.nttdata.nttbank.infra.persistence.entities.UsuarioEntity;
 import com.nttdata.nttbank.infra.persistence.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -54,7 +68,55 @@ public class RepositorioDeUsuarioJpa implements RepositorioDeUsuario {
     }
 
     @Override
-    public List<Usuario> importarUsuariosExcel() {
-        return null;
+    public List<Usuario> importarUsuariosExcel(MultipartFile file) throws IOException {
+        List<Usuario> usuarios = new ArrayList<>();
+
+        try (InputStream is = file.getInputStream();
+             Workbook workbook = new XSSFWorkbook(is)) {
+            Sheet sheet = workbook.getSheetAt(0);
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                Row row = sheet.getRow(i);
+                if (row != null) {
+                    Usuario usuario = new Usuario();
+                    usuario.setCpf(getCellValueAsString(row.getCell(0)));
+                    usuario.setNome(row.getCell(1).getStringCellValue());
+                    usuario.setLogin(row.getCell(2).getStringCellValue());
+                    //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    Date dataNascimento = row.getCell(3).getDateCellValue();
+                    LocalDate localDate = dataNascimento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                    usuario.setNascimento(localDate);
+                    usuario.setEmail(row.getCell(4).getStringCellValue());
+                    usuarios.add(usuario);
+                }
+            }
+        }
+
+        List<UsuarioEntity> usuarioEntityList = usuarios.stream().map(mapper::toEntity).collect(Collectors.toList());
+        List<UsuarioEntity> usuarioEntityListSaved = repositorio.saveAll(usuarioEntityList);
+        return usuarioEntityListSaved.stream().map(mapper::toDomain).collect(Collectors.toList());
     }
+
+
+    private String getCellValueAsString(Cell cell) {
+        if (cell == null) {
+            return "";
+        }
+
+        switch (cell.getCellType()) {
+            case STRING:
+                return cell.getStringCellValue(); // Se for STRING, retorna o valor direto.
+            case NUMERIC:
+                return String.valueOf((long) cell.getNumericCellValue());
+            case BOOLEAN:
+                return Boolean.toString(cell.getBooleanCellValue());
+            case FORMULA:
+                return cell.getCellFormula();
+            case BLANK:
+                return "";
+            default:
+                return "";
+        }
+    }
+
+
 }

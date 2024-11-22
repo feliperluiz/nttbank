@@ -1,7 +1,9 @@
 package com.nttdata.nttbank.application.gateways;
 
 import com.nttdata.nttbank.domain.entities.Usuario;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface RepositorioDeUsuario {
@@ -14,7 +16,7 @@ public interface RepositorioDeUsuario {
 
     void removerUsuario(Long id);
 
-    List<Usuario> importarUsuariosExcel();
+    List<Usuario> importarUsuariosExcel(MultipartFile file) throws IOException;
 
 
 }
