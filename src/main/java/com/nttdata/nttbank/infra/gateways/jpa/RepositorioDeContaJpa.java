@@ -47,10 +47,11 @@ public class RepositorioDeContaJpa implements RepositorioDeConta {
     public Conta alterarConta(Conta conta) {
         Optional<ContaEntity> entity = repositorio.findById(conta.getId());
         if (entity.isEmpty()) {
-            throw new EntityNotFoundException("Entidade com ID " + conta.getId() + " não encontrada.");
+            throw new EntityNotFoundException("Conta com ID " + conta.getId() + " não encontrada.");
         }
         ContaEntity entityUpdated = mapper.toEntity(conta);
         entityUpdated.setId(entity.get().getId());
+        entityUpdated.setUsuario(entity.get().getUsuario());
         entityUpdated = repositorio.save(entityUpdated);
         return mapper.toDomain(entityUpdated);
     }
@@ -61,7 +62,7 @@ public class RepositorioDeContaJpa implements RepositorioDeConta {
         if (entity.isPresent()) {
             repositorio.delete(entity.get());
         } else {
-            throw new EntityNotFoundException("Entidade não encontrada.");
+            throw new EntityNotFoundException("Conta com ID " + id + " não encontrada.");
         }
     }
 }

@@ -21,8 +21,8 @@ public class TransacaoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "conta_id", referencedColumnName = "id", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "contaId", referencedColumnName = "id", nullable = false)
     private ContaEntity conta;
 
     private BigDecimal valor;
@@ -32,8 +32,8 @@ public class TransacaoEntity {
     @Enumerated(EnumType.STRING)
     private TipoOperacao tipoOperacao;
 
-    @ManyToOne
-    @JoinColumn(name = "conta_id_transferencia", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "contaIdTransferencia", referencedColumnName = "id")
     private ContaEntity contaTransferencia;
 
     @Enumerated(EnumType.STRING)

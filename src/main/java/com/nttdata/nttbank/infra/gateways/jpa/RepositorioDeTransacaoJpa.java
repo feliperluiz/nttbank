@@ -54,6 +54,8 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
 
         TransacaoEntity entityUpdated = mapper.toEntity(transacao);
         entityUpdated.setId(entity.getId());
+        entityUpdated.setContaTransferencia(entity.getContaTransferencia());
+        entityUpdated.setConta(entity.getConta());
         entityUpdated = repositorio.save(entityUpdated);
         return mapper.toDomain(entityUpdated);
     }

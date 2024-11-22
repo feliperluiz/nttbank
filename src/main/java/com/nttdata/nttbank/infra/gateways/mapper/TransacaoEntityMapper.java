@@ -10,6 +10,7 @@ public class TransacaoEntityMapper {
     }
 
     public Transacao toDomain(TransacaoEntity entity){
-        return new Transacao(entity.getId(), entity.getConta().getId(), entity.getValor(), entity.getDescricao(), entity.getTipoOperacao(), entity.getContaTransferencia().getId(), entity.getTipoDespesa());
+        Long idContaTransferencia = entity.getContaTransferencia() != null ? entity.getContaTransferencia().getId() : null;
+        return new Transacao(entity.getId(), entity.getConta().getId(), entity.getValor(), entity.getDescricao(), entity.getTipoOperacao(), idContaTransferencia, entity.getTipoDespesa());
     }
 }
