@@ -29,14 +29,14 @@ public class TransacaoEntity {
 
     private String descricao;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private TipoOperacao tipoOperacao;
 
     @ManyToOne
     @JoinColumn(name = "conta_id_transferencia", referencedColumnName = "id")
     private ContaEntity contaTransferencia;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private TipoDespesa tipoDespesa;
 
 }

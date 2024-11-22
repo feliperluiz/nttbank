@@ -4,7 +4,9 @@ import com.nttdata.nttbank.application.gateways.RepositorioDeConta;
 import com.nttdata.nttbank.domain.entities.Conta;
 import com.nttdata.nttbank.infra.gateways.mapper.ContaEntityMapper;
 import com.nttdata.nttbank.infra.persistence.entities.ContaEntity;
+import com.nttdata.nttbank.infra.persistence.entities.UsuarioEntity;
 import com.nttdata.nttbank.infra.persistence.repository.ContaRepository;
+import com.nttdata.nttbank.infra.persistence.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +20,19 @@ public class RepositorioDeContaJpa implements RepositorioDeConta {
 
     private final ContaRepository repositorio;
 
+    private final UsuarioRepository usuarioRepository;
+
     private final ContaEntityMapper mapper;
 
     @Override
     public Conta criarConta(Conta conta) {
         ContaEntity entity = mapper.toEntity(conta);
-        repositorio.save(entity);
+
+        UsuarioEntity usuarioEntity = usuarioRepository.findById(conta.getUsuarioId())
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
+
+        entity.setUsuario(usuarioEntity);
+        entity = repositorio.save(entity);
         return mapper.toDomain(entity);
     }
 
@@ -42,7 +51,7 @@ public class RepositorioDeContaJpa implements RepositorioDeConta {
         }
         ContaEntity entityUpdated = mapper.toEntity(conta);
         entityUpdated.setId(entity.get().getId());
-        repositorio.save(entityUpdated);
+        entityUpdated = repositorio.save(entityUpdated);
         return mapper.toDomain(entityUpdated);
     }
 

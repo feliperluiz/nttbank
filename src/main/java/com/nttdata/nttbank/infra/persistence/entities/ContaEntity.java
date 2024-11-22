@@ -21,7 +21,7 @@ public class ContaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "usuarioId", referencedColumnName = "id")
     private UsuarioEntity usuario;
 
@@ -33,7 +33,7 @@ public class ContaEntity {
 
     private BigDecimal saldo;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private TipoConta tipoConta;
 
     private Boolean bloqueada;

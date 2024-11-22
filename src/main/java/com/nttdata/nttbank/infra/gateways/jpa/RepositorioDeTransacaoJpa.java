@@ -3,11 +3,14 @@ package com.nttdata.nttbank.infra.gateways.jpa;
 import com.nttdata.nttbank.application.gateways.RepositorioDeTransacao;
 import com.nttdata.nttbank.domain.entities.Transacao;
 import com.nttdata.nttbank.infra.gateways.mapper.TransacaoEntityMapper;
+import com.nttdata.nttbank.infra.persistence.entities.ContaEntity;
 import com.nttdata.nttbank.infra.persistence.entities.TransacaoEntity;
+import com.nttdata.nttbank.infra.persistence.repository.ContaRepository;
 import com.nttdata.nttbank.infra.persistence.repository.TransacaoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -16,12 +19,24 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
 
     private final TransacaoRepository repositorio;
 
+    private final ContaRepository contaRepository;
+
     private final TransacaoEntityMapper mapper;
 
     @Override
     public Transacao criarTransacao(Transacao transacao) {
+        ContaEntity contaEntity = contaRepository.findById(transacao.getContaId())
+                .orElseThrow(() -> new EntityNotFoundException("Conta não encontrada"));
+
         TransacaoEntity entity = mapper.toEntity(transacao);
-        repositorio.save(entity);
+        entity.setConta(contaEntity);
+
+        if (transacao.getContaIdTransferencia() != null) {
+            Optional<ContaEntity> contaTransf = contaRepository.findById(transacao.getContaIdTransferencia());
+            entity.setContaTransferencia(contaTransf.get());
+        }
+
+        entity = repositorio.save(entity);
         return mapper.toDomain(entity);
     }
 
@@ -34,24 +49,18 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
 
     @Override
     public Transacao alterarTransacao(Transacao transacao) {
-        Optional<TransacaoEntity> entity = repositorio.findById(transacao.getId());
-        if (entity.isEmpty()) {
-            throw new EntityNotFoundException("Entidade com ID " + transacao.getId() + " não encontrada.");
-        }
+        TransacaoEntity entity = repositorio.findById(transacao.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Entidade não encontrada"));
 
         TransacaoEntity entityUpdated = mapper.toEntity(transacao);
-        entityUpdated.setId(entity.get().getId());
-        repositorio.save(entityUpdated);
+        entityUpdated.setId(entity.getId());
+        entityUpdated = repositorio.save(entityUpdated);
         return mapper.toDomain(entityUpdated);
     }
 
     @Override
     public void removerTransacao(Long id) {
-        Optional<TransacaoEntity> entity = repositorio.findById(id);
-        if (entity.isPresent()) {
-            repositorio.delete(entity.get());
-        } else {
-            throw new EntityNotFoundException("Entidade não encontrada.");
-        }
+        TransacaoEntity entity = repositorio.findById(id).orElseThrow(() -> new EntityNotFoundException("Transação não encontrada."));
+        repositorio.delete(entity);
     }
 }

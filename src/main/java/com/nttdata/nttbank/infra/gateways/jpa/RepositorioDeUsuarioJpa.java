@@ -23,7 +23,7 @@ public class RepositorioDeUsuarioJpa implements RepositorioDeUsuario {
     @Override
     public Usuario criarUsuario(Usuario usuario) {
         UsuarioEntity entity = mapper.toEntity(usuario);
-        repositorio.save(entity);
+        entity = repositorio.save(entity);
         return mapper.toDomain(entity);
     }
 
@@ -43,18 +43,14 @@ public class RepositorioDeUsuarioJpa implements RepositorioDeUsuario {
 
         UsuarioEntity entityUpdated = mapper.toEntity(usuario);
         entityUpdated.setId(entity.getId());
-        repositorio.save(entityUpdated);
+        entityUpdated = repositorio.save(entityUpdated);
         return mapper.toDomain(entityUpdated);
     }
 
     @Override
     public void removerUsuario(Long id) {
-        Optional<UsuarioEntity> entity = repositorio.findById(id);
-        if (entity.isPresent()) {
-            repositorio.delete(entity.get());
-        } else {
-            throw new EntityNotFoundException("Entidade não encontrada.");
-        }
+        UsuarioEntity entity = repositorio.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado."));
+        repositorio.delete(entity);
     }
 
     @Override

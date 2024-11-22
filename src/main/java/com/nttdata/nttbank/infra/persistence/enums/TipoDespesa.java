@@ -10,6 +10,7 @@ public enum TipoDespesa {
     EDUCACAO("Educação"),
     LAZER("Lazer"),
     VESTUARIO("Vestuário"),
+    CASA("Casa"),
     MORADIA("Moradia");
 
     private String tipo;

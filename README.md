@@ -68,3 +68,9 @@ Spring Boot, Docker, PostgreSQL, Spring Data JPA, Spring Security, Apache POI, S
 * Requisito funcional: Somente usuários autenticados do Banco podem ver informações/relatórios de várias contas
 
 
+## INSTRUÇÕES PARA EXECUÇÃO
+
+- Executar Docker Desktop em máquina local - versão 4.36.0
+- Verificar se não existem processos rodando na porta 5432 (pois a aplicação irá inicializar o Postgres)
+- Executar o projeto a partir da classe NttbankApplication.java
+- Criar um Usuario, uma Conta para este Usuario e uma Transacao para esta Conta

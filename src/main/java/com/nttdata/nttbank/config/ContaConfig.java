@@ -8,6 +8,7 @@ import com.nttdata.nttbank.application.usecases.conta.RemoverConta;
 import com.nttdata.nttbank.infra.gateways.jpa.RepositorioDeContaJpa;
 import com.nttdata.nttbank.infra.gateways.mapper.ContaEntityMapper;
 import com.nttdata.nttbank.infra.persistence.repository.ContaRepository;
+import com.nttdata.nttbank.infra.persistence.repository.UsuarioRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -35,8 +36,8 @@ public class ContaConfig {
     }
 
     @Bean
-    RepositorioDeContaJpa criarRepositorioConta(ContaRepository repositorio, ContaEntityMapper mapper){
-        return new RepositorioDeContaJpa(repositorio, mapper);
+    RepositorioDeContaJpa criarRepositorioConta(ContaRepository repositorio, UsuarioRepository usuarioRepository, ContaEntityMapper mapper){
+        return new RepositorioDeContaJpa(repositorio, usuarioRepository, mapper);
     }
 
     @Bean
