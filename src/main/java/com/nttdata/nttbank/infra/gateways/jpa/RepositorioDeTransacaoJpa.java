@@ -6,10 +6,14 @@ import com.nttdata.nttbank.domain.entities.Transacao;
 import com.nttdata.nttbank.infra.gateways.mapper.TransacaoEntityMapper;
 import com.nttdata.nttbank.infra.persistence.entities.ContaEntity;
 import com.nttdata.nttbank.infra.persistence.entities.TransacaoEntity;
+import com.nttdata.nttbank.infra.persistence.enums.TipoDespesa;
+import com.nttdata.nttbank.infra.persistence.enums.TipoOperacao;
 import com.nttdata.nttbank.infra.persistence.repository.ContaRepository;
 import com.nttdata.nttbank.infra.persistence.repository.TransacaoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -69,7 +73,21 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
 
     @Override
     public List<RelatorioTransacao> resumoDespesas(String cpf) {
-        return repositorio.findTransacoesPorCpf(cpf);
+
+        return mapToRelatorioTransacao(repositorio.findTransacoesPorCpf(cpf));
+    }
+
+    List<RelatorioTransacao> mapToRelatorioTransacao(List<Object[]> results) {
+        return results.stream()
+                .map(r -> new RelatorioTransacao(
+                        (String) r[0],
+                        (Long) r[1],
+                        (BigDecimal) r[2],
+                        (String) r[3],
+                        (TipoDespesa) r[4],
+                        (TipoOperacao) r[5]
+                ))
+                .collect(Collectors.toList());
     }
 
 

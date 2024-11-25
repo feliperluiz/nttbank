@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 public record ContaDto(
         Long id,
 
-        @NotBlank
+        @NotNull
         Long usuarioId,
 
         @NotBlank

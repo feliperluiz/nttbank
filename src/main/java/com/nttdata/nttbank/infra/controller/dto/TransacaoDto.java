@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 public record TransacaoDto(
         Long id,
 
-        @NotBlank
+        @NotNull
         Long contaId,
 
         @NotNull
