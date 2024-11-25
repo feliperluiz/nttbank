@@ -17,4 +17,6 @@ public interface RepositorioDeTransacao {
 
     List<RelatorioTransacao> resumoDespesas(String cpf);
 
+    void graficoDespesas(String cpf);
+
 }

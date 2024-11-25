@@ -6,8 +6,13 @@ import com.nttdata.nttbank.domain.entities.Transacao;
 import com.nttdata.nttbank.infra.controller.dto.TransacaoDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,6 +63,14 @@ public class TransacaoController {
     @GetMapping("/relatorio/{cpf}")
     public List<RelatorioTransacao> resumoDespesas(@PathVariable("cpf") String cpf) {
         return resumoDespesas.listarTransacoes(cpf);
+    }
+
+    @GetMapping(value = "/grafico/{cpf}", produces = MediaType.IMAGE_PNG_VALUE)
+    public byte[] graficoDespesas(@PathVariable("cpf") String cpf) throws IOException {
+        resumoDespesas.graficoDespesas(cpf);
+        File barChartFile = new File("grafico_despesas.png");
+        return Files.readAllBytes(barChartFile.toPath());
+
     }
 
 }

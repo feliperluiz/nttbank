@@ -12,9 +12,16 @@ import com.nttdata.nttbank.infra.persistence.repository.ContaRepository;
 import com.nttdata.nttbank.infra.persistence.repository.TransacaoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtils;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.category.DefaultCategoryDataset;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -75,6 +82,38 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
     public List<RelatorioTransacao> resumoDespesas(String cpf) {
 
         return mapToRelatorioTransacao(repositorio.findTransacoesPorCpf(cpf));
+    }
+
+    @Override
+    public void graficoDespesas(String cpf) {
+        List<RelatorioTransacao> relatorioTransacaoList = this.resumoDespesas(cpf);
+
+        Map<String, Double> somaPorTipoDespesa = relatorioTransacaoList.stream()
+                .collect(Collectors.groupingBy(
+                        t -> t.getTipoDespesa().getTipo(),
+                        Collectors.summingDouble(t -> Double.parseDouble(t.getValorTransacao().toString()))
+                ));
+
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        somaPorTipoDespesa.forEach((tipoDespesa, valorTotal) ->
+                dataset.addValue(valorTotal, "Valor Total", tipoDespesa)
+        );
+
+        JFreeChart barChart = ChartFactory.createBarChart(
+                "Despesas por Tipo",
+                "Tipo de Despesa",
+                "Valor Total",
+                dataset
+        );
+
+        File barChartFile = new File("grafico_despesas.png");
+        try {
+            ChartUtils.saveChartAsPNG(barChartFile, barChart, 800, 600);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        System.out.println("Gráfico gerado: " + barChartFile.getAbsolutePath());
     }
 
     List<RelatorioTransacao> mapToRelatorioTransacao(List<Object[]> results) {
