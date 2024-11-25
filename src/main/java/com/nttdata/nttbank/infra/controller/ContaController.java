@@ -6,6 +6,7 @@ import com.nttdata.nttbank.application.usecases.conta.ListarContas;
 import com.nttdata.nttbank.application.usecases.conta.RemoverConta;
 import com.nttdata.nttbank.domain.entities.Conta;
 import com.nttdata.nttbank.infra.controller.dto.ContaDto;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class ContaController {
     private AlterarConta alterarConta;
 
     @PostMapping("/criar")
-    public ContaDto criarConta(@RequestBody ContaDto dto) {
+    public ContaDto criarConta(@RequestBody @Valid ContaDto dto) {
         Conta salvo = criarConta.criarConta(new Conta(null, dto.usuarioId(), dto.agencia(), dto.conta(), dto.dac(), dto.saldo(), dto.tipoConta(), dto.bloqueada()));
         return new ContaDto(salvo.getId(), salvo.getUsuarioId(), salvo.getAgencia(), salvo.getConta(), salvo.getDac(), salvo.getSaldo(), salvo.getTipoConta(), salvo.getBloqueada());
     }
@@ -43,7 +44,7 @@ public class ContaController {
     }
 
     @PutMapping("/alterar")
-    public ContaDto alterarConta(@RequestBody ContaDto dto) {
+    public ContaDto alterarConta(@RequestBody @Valid ContaDto dto) {
         Conta salvo = alterarConta.alterarConta(new Conta(dto.id(), dto.usuarioId(), dto.agencia(), dto.conta(), dto.dac(), dto.saldo(), dto.tipoConta(), dto.bloqueada()));
         return new ContaDto(salvo.getId(), salvo.getUsuarioId(), salvo.getAgencia(), salvo.getConta(), salvo.getDac(), salvo.getSaldo(), salvo.getTipoConta(), salvo.getBloqueada());
     }

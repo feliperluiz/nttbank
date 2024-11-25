@@ -1,10 +1,7 @@
 package com.nttdata.nttbank.config;
 
 import com.nttdata.nttbank.application.gateways.RepositorioDeTransacao;
-import com.nttdata.nttbank.application.usecases.transacao.AlterarTransacao;
-import com.nttdata.nttbank.application.usecases.transacao.CriarTransacao;
-import com.nttdata.nttbank.application.usecases.transacao.ListarTransacoes;
-import com.nttdata.nttbank.application.usecases.transacao.RemoverTransacao;
+import com.nttdata.nttbank.application.usecases.transacao.*;
 import com.nttdata.nttbank.infra.gateways.jpa.RepositorioDeTransacaoJpa;
 import com.nttdata.nttbank.infra.gateways.mapper.TransacaoEntityMapper;
 import com.nttdata.nttbank.infra.persistence.repository.ContaRepository;
@@ -33,6 +30,11 @@ public class TransacaoConfig {
     @Bean
     RemoverTransacao removerTransacao(RepositorioDeTransacao repositorioDeTransacao){
         return new RemoverTransacao(repositorioDeTransacao);
+    }
+
+    @Bean
+    ResumoDespesas resumoDespesas(RepositorioDeTransacao repositorioDeTransacao){
+        return new ResumoDespesas(repositorioDeTransacao);
     }
 
     @Bean

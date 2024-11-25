@@ -3,6 +3,7 @@ package com.nttdata.nttbank.infra.controller;
 import com.nttdata.nttbank.application.usecases.usuario.*;
 import com.nttdata.nttbank.domain.entities.Usuario;
 import com.nttdata.nttbank.infra.controller.dto.UsuarioDto;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -34,7 +35,7 @@ public class UsuarioController {
     private ImportarUsuariosExcel importarUsuariosExcel;
 
     @PostMapping("/criar")
-    public UsuarioDto criarUsuario(@RequestBody UsuarioDto dto) {
+    public UsuarioDto criarUsuario(@RequestBody @Valid UsuarioDto dto) {
         Usuario salvo = criarUsuario.criarUsuario(new Usuario(null, dto.cpf(), dto.nome(), dto.login(), dto.nascimento(), dto.email()));
         return new UsuarioDto(salvo.getCpf(), salvo.getNome(), salvo.getLogin(), salvo.getNascimento(), salvo.getEmail());
     }
@@ -47,7 +48,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/alterar")
-    public UsuarioDto alterarUsuario(@RequestBody UsuarioDto dto) {
+    public UsuarioDto alterarUsuario(@RequestBody @Valid UsuarioDto dto) {
         Usuario salvo = alterarUsuario.alterarUsuario(new Usuario(null, dto.cpf(), dto.nome(), dto.login(), dto.nascimento(), dto.email()));
         return new UsuarioDto(salvo.getCpf(), salvo.getNome(), salvo.getLogin(), salvo.getNascimento(), salvo.getEmail());
     }

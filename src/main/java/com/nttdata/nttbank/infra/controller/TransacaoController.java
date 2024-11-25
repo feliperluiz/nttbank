@@ -1,11 +1,10 @@
 package com.nttdata.nttbank.infra.controller;
 
-import com.nttdata.nttbank.application.usecases.transacao.AlterarTransacao;
-import com.nttdata.nttbank.application.usecases.transacao.CriarTransacao;
-import com.nttdata.nttbank.application.usecases.transacao.ListarTransacoes;
-import com.nttdata.nttbank.application.usecases.transacao.RemoverTransacao;
+import com.nttdata.nttbank.application.usecases.transacao.*;
+import com.nttdata.nttbank.domain.entities.RelatorioTransacao;
 import com.nttdata.nttbank.domain.entities.Transacao;
 import com.nttdata.nttbank.infra.controller.dto.TransacaoDto;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +27,11 @@ public class TransacaoController {
     @Autowired
     private RemoverTransacao removerTransacao;
 
+    @Autowired
+    private ResumoDespesas resumoDespesas;
+
     @PostMapping("/criar")
-    public TransacaoDto criarTransacao(@RequestBody TransacaoDto dto) {
+    public TransacaoDto criarTransacao(@RequestBody @Valid TransacaoDto dto) {
         Transacao salvo = criarTransacao.criarTransacao(new Transacao(null, dto.contaId(), dto.valor(), dto.descricao(), dto.tipoOperacao(), dto.contaIdTransferencia(), dto.tipoDespesa()));
         return new TransacaoDto(salvo.getId(), salvo.getContaId(), salvo.getValor(), salvo.getDescricao(), salvo.getTipoOperacao(), salvo.getContaIdTransferencia(), salvo.getTipoDespesa());
     }
@@ -42,7 +44,7 @@ public class TransacaoController {
     }
 
     @PutMapping("/alterar")
-    public TransacaoDto alterarTransacao(@RequestBody TransacaoDto dto) {
+    public TransacaoDto alterarTransacao(@RequestBody @Valid TransacaoDto dto) {
         Transacao salvo = alterarTransacao.alterarTransacao(new Transacao(dto.id(), dto.contaId(), dto.valor(), dto.descricao(), dto.tipoOperacao(), dto.contaIdTransferencia(), dto.tipoDespesa()));
         return new TransacaoDto(salvo.getId(), salvo.getContaId(), salvo.getValor(), salvo.getDescricao(), salvo.getTipoOperacao(), salvo.getContaIdTransferencia(), salvo.getTipoDespesa());
     }
@@ -51,6 +53,11 @@ public class TransacaoController {
     public ResponseEntity<Void> removerTransacao(@PathVariable("id") Long id) {
         removerTransacao.removerTransacao(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/relatorio/{cpf}")
+    public List<RelatorioTransacao> resumoDespesas(@PathVariable("cpf") String cpf) {
+        return resumoDespesas.listarTransacoes(cpf);
     }
 
 }

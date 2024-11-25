@@ -1,6 +1,7 @@
 package com.nttdata.nttbank.infra.gateways.jpa;
 
 import com.nttdata.nttbank.application.gateways.RepositorioDeTransacao;
+import com.nttdata.nttbank.domain.entities.RelatorioTransacao;
 import com.nttdata.nttbank.domain.entities.Transacao;
 import com.nttdata.nttbank.infra.gateways.mapper.TransacaoEntityMapper;
 import com.nttdata.nttbank.infra.persistence.entities.ContaEntity;
@@ -65,4 +66,11 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
         TransacaoEntity entity = repositorio.findById(id).orElseThrow(() -> new EntityNotFoundException("Transação não encontrada."));
         repositorio.delete(entity);
     }
+
+    @Override
+    public List<RelatorioTransacao> resumoDespesas(String cpf) {
+        return repositorio.findTransacoesPorCpf(cpf);
+    }
+
+
 }
