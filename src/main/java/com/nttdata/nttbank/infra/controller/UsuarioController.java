@@ -35,22 +35,23 @@ public class UsuarioController {
     private ImportarUsuariosExcel importarUsuariosExcel;
 
     @PostMapping("/criar")
-    public UsuarioDto criarUsuario(@RequestBody @Valid UsuarioDto dto) {
-        Usuario salvo = criarUsuario.criarUsuario(new Usuario(null, dto.cpf(), dto.nome(), dto.login(), dto.nascimento(), dto.email()));
-        return new UsuarioDto(salvo.getCpf(), salvo.getNome(), salvo.getLogin(), salvo.getNascimento(), salvo.getEmail());
+    public ResponseEntity<UsuarioDto> criarUsuario(@RequestBody @Valid UsuarioDto dto) {
+        Usuario salvo = criarUsuario.criarUsuario(new Usuario(null, dto.cpf(), dto.nome(), dto.login(), dto.senha(), dto.nascimento(), dto.email()));
+        return ResponseEntity.status(HttpStatusCode.valueOf(201))
+                .body(new UsuarioDto(salvo.getCpf(), salvo.getNome(), salvo.getLogin(), salvo.getSenha(), salvo.getNascimento(), salvo.getEmail()));
     }
 
     @GetMapping("/listar")
-    public List<UsuarioDto> listarUsuarios() {
-        return listarUsuarios.listarUsuarios().stream()
-                .map(u -> new UsuarioDto(u.getCpf(), u.getNome(), u.getLogin(), u.getNascimento(), u.getEmail()))
-                .collect(Collectors.toList());
+    public ResponseEntity<List<UsuarioDto>> listarUsuarios() {
+        return ResponseEntity.ok(listarUsuarios.listarUsuarios().stream()
+                .map(u -> new UsuarioDto(u.getCpf(), u.getNome(), u.getLogin(), u.getSenha(), u.getNascimento(), u.getEmail()))
+                .collect(Collectors.toList()));
     }
 
     @PutMapping("/alterar")
-    public UsuarioDto alterarUsuario(@RequestBody @Valid UsuarioDto dto) {
-        Usuario salvo = alterarUsuario.alterarUsuario(new Usuario(null, dto.cpf(), dto.nome(), dto.login(), dto.nascimento(), dto.email()));
-        return new UsuarioDto(salvo.getCpf(), salvo.getNome(), salvo.getLogin(), salvo.getNascimento(), salvo.getEmail());
+    public ResponseEntity<UsuarioDto> alterarUsuario(@RequestBody @Valid UsuarioDto dto) {
+        Usuario salvo = alterarUsuario.alterarUsuario(new Usuario(null, dto.cpf(), dto.nome(), dto.login(), dto.senha(), dto.nascimento(), dto.email()));
+        return ResponseEntity.ok(new UsuarioDto(salvo.getCpf(), salvo.getNome(), salvo.getLogin(), salvo.getSenha(), salvo.getNascimento(), salvo.getEmail()));
     }
 
     @DeleteMapping("/remover/{id}")
@@ -60,12 +61,12 @@ public class UsuarioController {
     }
 
     @PostMapping("/upload")
-    public List<UsuarioDto> uploadExcel(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<List<UsuarioDto>> uploadExcel(@RequestParam("file") MultipartFile file) {
         try {
             List<Usuario> usuarios = importarUsuariosExcel.importarUsuariosExcel(file);
-            return usuarios.stream()
-                    .map(u -> new UsuarioDto(u.getCpf(), u.getNome(), u.getLogin(), u.getNascimento(), u.getEmail()))
-                    .collect(Collectors.toList());
+            return ResponseEntity.ok(usuarios.stream()
+                    .map(u -> new UsuarioDto(u.getCpf(), u.getNome(), u.getLogin(), u.getSenha(), u.getNascimento(), u.getEmail()))
+                    .collect(Collectors.toList()));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(500), "Erro ao importar arquivo");
         }

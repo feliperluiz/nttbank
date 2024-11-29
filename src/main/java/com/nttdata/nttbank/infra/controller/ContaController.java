@@ -7,7 +7,9 @@ import com.nttdata.nttbank.application.usecases.conta.RemoverConta;
 import com.nttdata.nttbank.domain.entities.Conta;
 import com.nttdata.nttbank.infra.controller.dto.ContaDto;
 import jakarta.validation.Valid;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,22 +33,23 @@ public class ContaController {
     private AlterarConta alterarConta;
 
     @PostMapping("/criar")
-    public ContaDto criarConta(@RequestBody @Valid ContaDto dto) {
+    public ResponseEntity<ContaDto> criarConta(@RequestBody @Valid ContaDto dto) {
         Conta salvo = criarConta.criarConta(new Conta(null, dto.usuarioId(), dto.agencia(), dto.conta(), dto.dac(), dto.saldo(), dto.tipoConta(), dto.bloqueada()));
-        return new ContaDto(salvo.getId(), salvo.getUsuarioId(), salvo.getAgencia(), salvo.getConta(), salvo.getDac(), salvo.getSaldo(), salvo.getTipoConta(), salvo.getBloqueada());
+        return ResponseEntity.status(201)
+                .body(new ContaDto(salvo.getId(), salvo.getUsuarioId(), salvo.getAgencia(), salvo.getConta(), salvo.getDac(), salvo.getSaldo(), salvo.getTipoConta(), salvo.getBloqueada()));
     }
 
     @GetMapping("/listar")
-    public List<ContaDto> listarContas() {
-        return listarContas.listarContas().stream()
+    public ResponseEntity<List<ContaDto>> listarContas() {
+        return ResponseEntity.ok(listarContas.listarContas().stream()
                 .map(u -> new ContaDto(u.getId(), u.getUsuarioId(), u.getAgencia(), u.getConta(), u.getDac(), u.getSaldo(), u.getTipoConta(), u.getBloqueada()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     @PutMapping("/alterar")
-    public ContaDto alterarConta(@RequestBody @Valid ContaDto dto) {
+    public ResponseEntity<ContaDto> alterarConta(@RequestBody @Valid ContaDto dto) {
         Conta salvo = alterarConta.alterarConta(new Conta(dto.id(), dto.usuarioId(), dto.agencia(), dto.conta(), dto.dac(), dto.saldo(), dto.tipoConta(), dto.bloqueada()));
-        return new ContaDto(salvo.getId(), salvo.getUsuarioId(), salvo.getAgencia(), salvo.getConta(), salvo.getDac(), salvo.getSaldo(), salvo.getTipoConta(), salvo.getBloqueada());
+        return ResponseEntity.ok(new ContaDto(salvo.getId(), salvo.getUsuarioId(), salvo.getAgencia(), salvo.getConta(), salvo.getDac(), salvo.getSaldo(), salvo.getTipoConta(), salvo.getBloqueada()));
     }
 
     @DeleteMapping("/remover/{id}")

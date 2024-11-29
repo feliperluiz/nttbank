@@ -15,6 +15,7 @@ public class Usuario {
     private String cpf;
     private String nome;
     private String login;
+    private String senha;
     private LocalDate nascimento;
     private String email;
 

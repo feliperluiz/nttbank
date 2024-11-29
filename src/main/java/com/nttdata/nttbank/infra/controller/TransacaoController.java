@@ -36,22 +36,23 @@ public class TransacaoController {
     private ResumoDespesas resumoDespesas;
 
     @PostMapping("/criar")
-    public TransacaoDto criarTransacao(@RequestBody @Valid TransacaoDto dto) {
+    public ResponseEntity<TransacaoDto> criarTransacao(@RequestBody @Valid TransacaoDto dto) {
         Transacao salvo = criarTransacao.criarTransacao(new Transacao(null, dto.contaId(), dto.valor(), dto.descricao(), dto.tipoOperacao(), dto.contaIdTransferencia(), dto.tipoDespesa()));
-        return new TransacaoDto(salvo.getId(), salvo.getContaId(), salvo.getValor(), salvo.getDescricao(), salvo.getTipoOperacao(), salvo.getContaIdTransferencia(), salvo.getTipoDespesa());
+        return ResponseEntity.status(201)
+                .body(new TransacaoDto(salvo.getId(), salvo.getContaId(), salvo.getValor(), salvo.getDescricao(), salvo.getTipoOperacao(), salvo.getContaIdTransferencia(), salvo.getTipoDespesa()));
     }
 
     @GetMapping("/listar")
-    public List<TransacaoDto> listarTransacoes() {
-        return listarTransacoes.listarTransacoes().stream()
+    public ResponseEntity<List<TransacaoDto>> listarTransacoes() {
+        return ResponseEntity.ok(listarTransacoes.listarTransacoes().stream()
                 .map(u -> new TransacaoDto(u.getId(), u.getContaId(), u.getValor(), u.getDescricao(), u.getTipoOperacao(), u.getContaIdTransferencia(), u.getTipoDespesa()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     @PutMapping("/alterar")
-    public TransacaoDto alterarTransacao(@RequestBody @Valid TransacaoDto dto) {
+    public ResponseEntity<TransacaoDto> alterarTransacao(@RequestBody @Valid TransacaoDto dto) {
         Transacao salvo = alterarTransacao.alterarTransacao(new Transacao(dto.id(), dto.contaId(), dto.valor(), dto.descricao(), dto.tipoOperacao(), dto.contaIdTransferencia(), dto.tipoDespesa()));
-        return new TransacaoDto(salvo.getId(), salvo.getContaId(), salvo.getValor(), salvo.getDescricao(), salvo.getTipoOperacao(), salvo.getContaIdTransferencia(), salvo.getTipoDespesa());
+        return ResponseEntity.ok(new TransacaoDto(salvo.getId(), salvo.getContaId(), salvo.getValor(), salvo.getDescricao(), salvo.getTipoOperacao(), salvo.getContaIdTransferencia(), salvo.getTipoDespesa()));
     }
 
     @DeleteMapping("/remover/{id}")
@@ -61,8 +62,8 @@ public class TransacaoController {
     }
 
     @GetMapping("/relatorio/{cpf}")
-    public List<RelatorioTransacao> resumoDespesas(@PathVariable("cpf") String cpf) {
-        return resumoDespesas.listarTransacoes(cpf);
+    public ResponseEntity<List<RelatorioTransacao>> resumoDespesas(@PathVariable("cpf") String cpf) {
+        return ResponseEntity.ok(resumoDespesas.listarTransacoes(cpf));
     }
 
     @GetMapping(value = "/grafico/{cpf}", produces = MediaType.IMAGE_PNG_VALUE)

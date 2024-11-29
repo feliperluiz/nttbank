@@ -14,6 +14,9 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -28,7 +31,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
-public class RepositorioDeUsuarioJpa implements RepositorioDeUsuario {
+public class RepositorioDeUsuarioJpa implements RepositorioDeUsuario, UserDetailsService {
 
     private final UsuarioRepository repositorio;
 
@@ -96,6 +99,10 @@ public class RepositorioDeUsuarioJpa implements RepositorioDeUsuario {
         return usuarioEntityListSaved.stream().map(mapper::toDomain).collect(Collectors.toList());
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
+        return repositorio.findByLogin(login);
+    }
 
     private String getCellValueAsString(Cell cell) {
         if (cell == null) {

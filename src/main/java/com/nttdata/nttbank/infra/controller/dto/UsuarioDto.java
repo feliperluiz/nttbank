@@ -18,6 +18,9 @@ public record UsuarioDto(
         @NotBlank
         String login,
 
+        @NotBlank
+        String senha,
+
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
         @NotNull
         LocalDate nascimento,

@@ -1,6 +1,8 @@
 package com.nttdata.nttbank.application.gateways;
 
 import com.nttdata.nttbank.domain.entities.Usuario;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -17,6 +19,5 @@ public interface RepositorioDeUsuario {
     void removerUsuario(Long id);
 
     List<Usuario> importarUsuariosExcel(MultipartFile file) throws IOException;
-
 
 }

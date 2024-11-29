@@ -9,6 +9,8 @@ import java.util.List;
 public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
     UsuarioEntity findByCpf(String cpf);
 
+    UsuarioEntity findByLogin(String login);
+
 
 
 }
