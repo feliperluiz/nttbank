@@ -4,6 +4,7 @@ import com.nttdata.nttbank.config.TokenService;
 import com.nttdata.nttbank.infra.controller.dto.AutenticacaoDto;
 import com.nttdata.nttbank.infra.controller.dto.UsuarioDto;
 import com.nttdata.nttbank.infra.persistence.entities.UsuarioEntity;
+import com.nttdata.nttbank.infra.persistence.security.DadosTokenJWT;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +27,11 @@ public class AutenticacaoController {
 
     @PostMapping
     public ResponseEntity efetuarLogin(@RequestBody @Valid AutenticacaoDto dados) {
-        var token = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
-        var authentication = manager.authenticate(token);
+        var authenticationToken = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
+        var authentication = manager.authenticate(authenticationToken);
 
-        return ResponseEntity.ok(tokenService.gerarToken((UsuarioEntity) authentication.getPrincipal()));
+        var tokenJWT = tokenService.gerarToken((UsuarioEntity) authentication.getPrincipal());
+
+        return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
     }
 }

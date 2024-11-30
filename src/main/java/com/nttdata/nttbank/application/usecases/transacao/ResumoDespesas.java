@@ -21,4 +21,8 @@ public class ResumoDespesas {
         repositorio.graficoDespesas(cpf);
     }
 
+    public byte[] resumoPdf() {
+        return repositorio.resumoPdf();
+    }
+
 }

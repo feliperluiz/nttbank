@@ -6,6 +6,8 @@ import com.nttdata.nttbank.domain.entities.Transacao;
 import com.nttdata.nttbank.infra.controller.dto.TransacaoDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -64,6 +66,16 @@ public class TransacaoController {
     @GetMapping("/relatorio/{cpf}")
     public ResponseEntity<List<RelatorioTransacao>> resumoDespesas(@PathVariable("cpf") String cpf) {
         return ResponseEntity.ok(resumoDespesas.listarTransacoes(cpf));
+    }
+
+    @GetMapping("/resumo") //TODO rota autenticada, precisa ser ADM
+    public ResponseEntity<byte[]> resumoPdf() {
+        byte[] pdf = resumoDespesas.resumoPdf();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "inline; filename=resumo-transacoes.pdf");
+
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(pdf);
     }
 
     @GetMapping(value = "/grafico/{cpf}", produces = MediaType.IMAGE_PNG_VALUE)

@@ -1,5 +1,11 @@
 package com.nttdata.nttbank.infra.gateways.jpa;
 
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
 import com.nttdata.nttbank.application.gateways.RepositorioDeTransacao;
 import com.nttdata.nttbank.domain.entities.RelatorioTransacao;
 import com.nttdata.nttbank.domain.entities.Transacao;
@@ -17,6 +23,7 @@ import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -116,7 +123,43 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
         System.out.println("Gráfico gerado: " + barChartFile.getAbsolutePath());
     }
 
-    List<RelatorioTransacao> mapToRelatorioTransacao(List<Object[]> results) {
+    public byte[] resumoPdf() {
+        List<TransacaoEntity> transacoes = repositorio.findAll();
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        PdfWriter writer = new PdfWriter(out);
+        PdfDocument pdfDoc = new PdfDocument(writer);
+        Document document = new Document(pdfDoc);
+
+        Table table = new Table(8);
+        table.addCell(new Cell().add(new Paragraph("ID")));
+        table.addCell(new Cell().add(new Paragraph("Nome Usuário")));
+        table.addCell(new Cell().add(new Paragraph("Agência/Conta/DAC")));
+        table.addCell(new Cell().add(new Paragraph("Agência/Conta/DAC Origem/Destino")));
+        table.addCell(new Cell().add(new Paragraph("Valor")));
+        table.addCell(new Cell().add(new Paragraph("Descrição")));
+        table.addCell(new Cell().add(new Paragraph("Tipo Operação")));
+        table.addCell(new Cell().add(new Paragraph("Tipo Despesa")));
+
+        for (TransacaoEntity transacao : transacoes) {
+            table.addCell(new Cell().add(new Paragraph(transacao.getId().toString())));
+            table.addCell(new Cell().add(new Paragraph(transacao.getConta().getUsuario().getNome())));
+            table.addCell(new Cell().add(new Paragraph(transacao.getConta().getAgencia() + " " + transacao.getConta().getConta()+"-"+transacao.getConta().getDac())));
+            table.addCell(new Cell().add(new Paragraph(transacao.getContaTransferencia() != null ? transacao.getContaTransferencia().getAgencia() + " " + transacao.getContaTransferencia().getConta()+"-"+transacao.getContaTransferencia().getDac() : "")));
+            table.addCell(new Cell().add(new Paragraph("R$ " + transacao.getValor().toString())));
+            table.addCell(new Cell().add(new Paragraph(transacao.getDescricao())));
+            table.addCell(new Cell().add(new Paragraph(transacao.getTipoOperacao().getOperacao())));
+            table.addCell(new Cell().add(new Paragraph(transacao.getTipoDespesa().getTipo())));
+        }
+
+        document.add(table);
+        document.close();
+
+        return out.toByteArray();
+    }
+
+    private List<RelatorioTransacao> mapToRelatorioTransacao(List<Object[]> results) {
         return results.stream()
                 .map(r -> new RelatorioTransacao(
                         (String) r[0],

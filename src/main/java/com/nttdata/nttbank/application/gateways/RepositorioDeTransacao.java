@@ -19,4 +19,5 @@ public interface RepositorioDeTransacao {
 
     void graficoDespesas(String cpf);
 
+    byte[] resumoPdf();
 }
