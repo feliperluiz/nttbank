@@ -3,6 +3,7 @@ package com.nttdata.nttbank.infra.controller;
 import com.nttdata.nttbank.application.usecases.usuario.*;
 import com.nttdata.nttbank.domain.entities.Usuario;
 import com.nttdata.nttbank.infra.controller.dto.UsuarioDto;
+import com.nttdata.nttbank.infra.controller.dto.UsuarioRespDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,23 +36,23 @@ public class UsuarioController {
     private ImportarUsuariosExcel importarUsuariosExcel;
 
     @PostMapping("/criar")
-    public ResponseEntity<UsuarioDto> criarUsuario(@RequestBody @Valid UsuarioDto dto) {
-        Usuario salvo = criarUsuario.criarUsuario(new Usuario(null, dto.cpf(), dto.nome(), dto.login(), dto.senha(), dto.nascimento(), dto.email()));
+    public ResponseEntity<UsuarioRespDto> criarUsuario(@RequestBody @Valid UsuarioDto dto) {
+        Usuario salvo = criarUsuario.criarUsuario(new Usuario(null, dto.cpf(), dto.nome(), dto.login(), dto.senha(), dto.nascimento(), dto.email(), dto.roles()));
         return ResponseEntity.status(HttpStatusCode.valueOf(201))
-                .body(new UsuarioDto(salvo.getCpf(), salvo.getNome(), salvo.getLogin(), salvo.getSenha(), salvo.getNascimento(), salvo.getEmail()));
+                .body(new UsuarioRespDto(salvo.getCpf(), salvo.getNome(), salvo.getLogin(), salvo.getNascimento(), salvo.getEmail(), salvo.getRoles()));
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<List<UsuarioDto>> listarUsuarios() {
+    public ResponseEntity<List<UsuarioRespDto>> listarUsuarios() {
         return ResponseEntity.ok(listarUsuarios.listarUsuarios().stream()
-                .map(u -> new UsuarioDto(u.getCpf(), u.getNome(), u.getLogin(), u.getSenha(), u.getNascimento(), u.getEmail()))
+                .map(u -> new UsuarioRespDto(u.getCpf(), u.getNome(), u.getLogin(), u.getNascimento(), u.getEmail(), u.getRoles()))
                 .collect(Collectors.toList()));
     }
 
     @PutMapping("/alterar")
-    public ResponseEntity<UsuarioDto> alterarUsuario(@RequestBody @Valid UsuarioDto dto) {
-        Usuario salvo = alterarUsuario.alterarUsuario(new Usuario(null, dto.cpf(), dto.nome(), dto.login(), dto.senha(), dto.nascimento(), dto.email()));
-        return ResponseEntity.ok(new UsuarioDto(salvo.getCpf(), salvo.getNome(), salvo.getLogin(), salvo.getSenha(), salvo.getNascimento(), salvo.getEmail()));
+    public ResponseEntity<UsuarioRespDto> alterarUsuario(@RequestBody @Valid UsuarioDto dto) {
+        Usuario salvo = alterarUsuario.alterarUsuario(new Usuario(null, dto.cpf(), dto.nome(), dto.login(), dto.senha(), dto.nascimento(), dto.email(), dto.roles()));
+        return ResponseEntity.ok(new UsuarioRespDto(salvo.getCpf(), salvo.getNome(), salvo.getLogin(), salvo.getNascimento(), salvo.getEmail(), salvo.getRoles()));
     }
 
     @DeleteMapping("/remover/{id}")
@@ -61,11 +62,11 @@ public class UsuarioController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<List<UsuarioDto>> uploadExcel(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<List<UsuarioRespDto>> uploadExcel(@RequestParam("file") MultipartFile file) {
         try {
             List<Usuario> usuarios = importarUsuariosExcel.importarUsuariosExcel(file);
             return ResponseEntity.ok(usuarios.stream()
-                    .map(u -> new UsuarioDto(u.getCpf(), u.getNome(), u.getLogin(), u.getSenha(), u.getNascimento(), u.getEmail()))
+                    .map(u -> new UsuarioRespDto(u.getCpf(), u.getNome(), u.getLogin(), u.getNascimento(), u.getEmail(), u.getRoles()))
                     .collect(Collectors.toList()));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(500), "Erro ao importar arquivo");

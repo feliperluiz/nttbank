@@ -9,8 +9,8 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
-public record UsuarioDto(
-        
+public record UsuarioRespDto(
+
         @NotBlank
         String cpf,
 
@@ -20,9 +20,6 @@ public record UsuarioDto(
         @NotBlank
         String login,
 
-        @NotBlank
-        String senha,
-
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
         @NotNull
         LocalDate nascimento,
@@ -31,7 +28,6 @@ public record UsuarioDto(
         @Email
         String email,
 
-        @NotNull
         @NotEmpty
         List<String> roles
 

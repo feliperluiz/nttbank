@@ -3,6 +3,7 @@ package com.nttdata.nttbank.domain.entities;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,5 +19,6 @@ public class Usuario {
     private String senha;
     private LocalDate nascimento;
     private String email;
+    private List<String> roles;
 
 }

@@ -12,6 +12,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -38,9 +41,11 @@ public class UsuarioEntity implements UserDetails {
 
     private String email;
 
+    private List<String> roles;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return Objects.nonNull(roles) ? roles.stream().map(r -> new SimpleGrantedAuthority(r)).collect(Collectors.toList()): null;
     }
 
     @Override
