@@ -9,6 +9,7 @@ import com.itextpdf.layout.element.Table;
 import com.nttdata.nttbank.application.gateways.RepositorioDeTransacao;
 import com.nttdata.nttbank.domain.entities.RelatorioTransacao;
 import com.nttdata.nttbank.domain.entities.Transacao;
+import com.nttdata.nttbank.infra.gateways.external.CurrencyConverterService;
 import com.nttdata.nttbank.infra.gateways.mapper.TransacaoEntityMapper;
 import com.nttdata.nttbank.infra.persistence.entities.ContaEntity;
 import com.nttdata.nttbank.infra.persistence.entities.TransacaoEntity;
@@ -29,7 +30,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -41,6 +41,8 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
     private final ContaRepository contaRepository;
 
     private final TransacaoEntityMapper mapper;
+
+    private final CurrencyConverterService currencyConverterService;
 
     @Override
     public Transacao criarTransacao(Transacao transacao) {
@@ -98,7 +100,7 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
         Map<String, Double> somaPorTipoDespesa = relatorioTransacaoList.stream()
                 .collect(Collectors.groupingBy(
                         t -> t.getTipoDespesa().getTipo(),
-                        Collectors.summingDouble(t -> Double.parseDouble(t.getValorTransacao().toString()))
+                        Collectors.summingDouble(t -> Double.parseDouble(t.getValorTransacaoReais().toString()))
                 ));
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
@@ -165,6 +167,8 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
                         (String) r[0],
                         (Long) r[1],
                         (BigDecimal) r[2],
+                        convertToDolar((BigDecimal) r[2]),
+                        convertToEuro((BigDecimal) r[2]),
                         (String) r[3],
                         (TipoDespesa) r[4],
                         (TipoOperacao) r[5]
@@ -172,5 +176,12 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
                 .collect(Collectors.toList());
     }
 
+    private BigDecimal convertToEuro(BigDecimal valorReais) {
+        return currencyConverterService.convertToCurrency("EUR", valorReais);
+    }
+
+    private BigDecimal convertToDolar(BigDecimal valorReais) {
+        return currencyConverterService.convertToCurrency("USD", valorReais);
+    }
 
 }

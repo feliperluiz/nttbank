@@ -65,7 +65,7 @@ public class TransacaoController {
 
     @GetMapping("/relatorio/{cpf}")
     public ResponseEntity<List<RelatorioTransacao>> resumoDespesas(@PathVariable("cpf") String cpf) {
-        return ResponseEntity.ok(resumoDespesas.listarTransacoes(cpf));
+        return ResponseEntity.ok(resumoDespesas.resumoDespesas(cpf));
     }
 
     @GetMapping("/resumo") //TODO rota autenticada, precisa ser ADM
@@ -83,7 +83,6 @@ public class TransacaoController {
         resumoDespesas.graficoDespesas(cpf);
         File barChartFile = new File("grafico_despesas.png");
         return Files.readAllBytes(barChartFile.toPath());
-
     }
 
 }

@@ -13,7 +13,7 @@ public class ResumoDespesas {
         this.repositorio = repositorio;
     }
 
-    public List<RelatorioTransacao> listarTransacoes(String cpf) {
+    public List<RelatorioTransacao> resumoDespesas(String cpf) {
         return repositorio.resumoDespesas(cpf);
     }
 

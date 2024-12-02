@@ -14,7 +14,9 @@ import java.math.BigDecimal;
 public class RelatorioTransacao {
     private String usuarioNome;
     private Long contaId;
-    private BigDecimal valorTransacao;
+    private BigDecimal valorTransacaoReais;
+    private BigDecimal valorTransacaoDolares;
+    private BigDecimal valorTransacaoEuros;
     private String descricaoTransacao;
     private TipoDespesa tipoDespesa;
     private TipoOperacao tipoOperacao;

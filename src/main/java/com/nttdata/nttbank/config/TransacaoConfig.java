@@ -2,6 +2,7 @@ package com.nttdata.nttbank.config;
 
 import com.nttdata.nttbank.application.gateways.RepositorioDeTransacao;
 import com.nttdata.nttbank.application.usecases.transacao.*;
+import com.nttdata.nttbank.infra.gateways.external.CurrencyConverterService;
 import com.nttdata.nttbank.infra.gateways.jpa.RepositorioDeTransacaoJpa;
 import com.nttdata.nttbank.infra.gateways.mapper.TransacaoEntityMapper;
 import com.nttdata.nttbank.infra.persistence.repository.ContaRepository;
@@ -38,8 +39,8 @@ public class TransacaoConfig {
     }
 
     @Bean
-    RepositorioDeTransacaoJpa criarRepositorioTransacao(TransacaoRepository repositorio, ContaRepository contaRepository, TransacaoEntityMapper mapper){
-        return new RepositorioDeTransacaoJpa(repositorio, contaRepository, mapper);
+    RepositorioDeTransacaoJpa criarRepositorioTransacao(TransacaoRepository repositorio, ContaRepository contaRepository, TransacaoEntityMapper mapper, CurrencyConverterService currencyConverterService){
+        return new RepositorioDeTransacaoJpa(repositorio, contaRepository, mapper, currencyConverterService);
     }
 
     @Bean
