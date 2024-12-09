@@ -52,12 +52,15 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
         ContaEntity contaEntity = contaRepository.findById(transacao.getContaId())
                 .orElseThrow(() -> new EntityNotFoundException("Conta não encontrada"));
 
-        TransacaoEntity entity = mapper.toEntity(transacao);
-
         contaEntity.setSaldo(transacao.getTipoOperacao().equals(TipoOperacao.DEBITO) ?
                 contaEntity.getSaldo().subtract(transacao.getValor())
                 : contaEntity.getSaldo().add(transacao.getValor()));
 
+        if (contaEntity.getSaldo().compareTo(BigDecimal.ZERO) < 0) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(400), "Essa operação fará com que o Saldo fique negativo.");
+        }
+
+        TransacaoEntity entity = mapper.toEntity(transacao);
         entity.setConta(contaEntity);
 
         if (transacao.getContaIdTransferencia() != null) {
@@ -66,6 +69,11 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
                 contaTransf.get().setSaldo(transacao.getTipoOperacao().equals(TipoOperacao.DEBITO) ?
                         contaTransf.get().getSaldo().add(transacao.getValor()) :
                         contaTransf.get().getSaldo().subtract(transacao.getValor()));
+
+                if (contaTransf.get().getSaldo().compareTo(BigDecimal.ZERO) < 0) {
+                    throw new ResponseStatusException(HttpStatusCode.valueOf(400), "Essa operação fará com que o Saldo da conta alvo fique negativo.");
+                }
+
                 entity.setContaTransferencia(contaTransf.get());
                 contaRepository.save(contaTransf.get());
             }
