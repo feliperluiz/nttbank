@@ -68,7 +68,7 @@ public class TransacaoController {
         return ResponseEntity.ok(resumoDespesas.resumoDespesas(cpf));
     }
 
-    @GetMapping("/resumo") //TODO rota autenticada, precisa ser ADM
+    @GetMapping("/resumo")
     public ResponseEntity<byte[]> resumoPdf() {
         byte[] pdf = resumoDespesas.resumoPdf();
 

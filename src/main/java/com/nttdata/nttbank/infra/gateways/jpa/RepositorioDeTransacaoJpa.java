@@ -23,6 +23,8 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -30,6 +32,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -46,19 +49,26 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
 
     @Override
     public Transacao criarTransacao(Transacao transacao) {
-        /*TODO Caso Transacao for de Debito e ter o campo contaIdTransferencia != null:
-           deve-se retirar o valor do saldo da Conta
-           e criar uma Transacao de Credito e creditar o valor no saldo da Conta alvo
-        */
         ContaEntity contaEntity = contaRepository.findById(transacao.getContaId())
                 .orElseThrow(() -> new EntityNotFoundException("Conta não encontrada"));
 
         TransacaoEntity entity = mapper.toEntity(transacao);
+
+        contaEntity.setSaldo(transacao.getTipoOperacao().equals(TipoOperacao.DEBITO) ?
+                contaEntity.getSaldo().subtract(transacao.getValor())
+                : contaEntity.getSaldo().add(transacao.getValor()));
+
         entity.setConta(contaEntity);
 
         if (transacao.getContaIdTransferencia() != null) {
             Optional<ContaEntity> contaTransf = contaRepository.findById(transacao.getContaIdTransferencia());
-            entity.setContaTransferencia(contaTransf.get());
+            if (contaTransf.isPresent()) {
+                contaTransf.get().setSaldo(transacao.getTipoOperacao().equals(TipoOperacao.DEBITO) ?
+                        contaTransf.get().getSaldo().add(transacao.getValor()) :
+                        contaTransf.get().getSaldo().subtract(transacao.getValor()));
+                entity.setContaTransferencia(contaTransf.get());
+                contaRepository.save(contaTransf.get());
+            }
         }
 
         entity = repositorio.save(entity);
@@ -78,6 +88,13 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
                 .orElseThrow(() -> new EntityNotFoundException("Entidade não encontrada"));
 
         TransacaoEntity entityUpdated = mapper.toEntity(transacao);
+
+        if (!Objects.equals(entityUpdated.getValor(), entity.getValor()) ||
+        !Objects.equals(entityUpdated.getConta(), entity.getConta()) ||
+        !Objects.equals(entityUpdated.getContaTransferencia(), entity.getContaTransferencia())) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(500), "Estes campos de transações não podem ser alterados!");
+        }
+
         entityUpdated.setId(entity.getId());
         entityUpdated.setContaTransferencia(entity.getContaTransferencia());
         entityUpdated.setConta(entity.getConta());
