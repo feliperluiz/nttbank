@@ -24,10 +24,7 @@ import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -84,11 +81,13 @@ public class RepositorioDeUsuarioJpa implements RepositorioDeUsuario, UserDetail
                     usuario.setCpf(getCellValueAsString(row.getCell(0)));
                     usuario.setNome(row.getCell(1).getStringCellValue());
                     usuario.setLogin(row.getCell(2).getStringCellValue());
+                    usuario.setSenha(row.getCell(3).getStringCellValue());
                     //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                    Date dataNascimento = row.getCell(3).getDateCellValue();
+                    Date dataNascimento = row.getCell(4).getDateCellValue();
                     LocalDate localDate = dataNascimento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                     usuario.setNascimento(localDate);
-                    usuario.setEmail(row.getCell(4).getStringCellValue());
+                    usuario.setEmail(row.getCell(5).getStringCellValue());
+                    usuario.setRoles(List.of(row.getCell(6).getStringCellValue().split(",")));
                     usuarios.add(usuario);
                 }
             }

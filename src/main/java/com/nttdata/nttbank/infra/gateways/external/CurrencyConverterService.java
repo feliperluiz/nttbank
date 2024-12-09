@@ -15,6 +15,12 @@ public class CurrencyConverterService {
     private String apiUrl;
 
     public BigDecimal convertToCurrency(String targetCurrency, BigDecimal amountInBRL) {
+        Double exchangeRate = this.retornaTaxaDeCambio(targetCurrency);
+
+        return amountInBRL.multiply(new BigDecimal(exchangeRate)).setScale(2, RoundingMode.HALF_UP);
+    }
+
+    private Double retornaTaxaDeCambio(String targetCurrency) {
         RestTemplate restTemplate = new RestTemplate();
 
         String url = String.format("%s/%s", apiUrl, "BRL");
@@ -24,13 +30,10 @@ public class CurrencyConverterService {
             throw new IllegalStateException("Não foi possível obter taxas de câmbio.");
         }
 
-        // Obtém a taxa de câmbio para a moeda de destino
         Double exchangeRate = response.getRates().get(targetCurrency.toUpperCase());
         if (exchangeRate == null) {
             throw new IllegalArgumentException("Moeda de destino inválida: " + targetCurrency);
         }
-
-        // Realiza a conversão
-        return amountInBRL.multiply(new BigDecimal(exchangeRate)).setScale(2, RoundingMode.HALF_UP);
+        return exchangeRate;
     }
 }

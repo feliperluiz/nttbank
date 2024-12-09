@@ -46,6 +46,10 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
 
     @Override
     public Transacao criarTransacao(Transacao transacao) {
+        /*TODO Caso Transacao for de Debito e ter o campo contaIdTransferencia != null:
+           deve-se retirar o valor do saldo da Conta
+           e criar uma Transacao de Credito e creditar o valor no saldo da Conta alvo
+        */
         ContaEntity contaEntity = contaRepository.findById(transacao.getContaId())
                 .orElseThrow(() -> new EntityNotFoundException("Conta não encontrada"));
 
