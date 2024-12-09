@@ -28,7 +28,14 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> {
                     req.requestMatchers(HttpMethod.POST, "/login").permitAll();
+                    req.requestMatchers(HttpMethod.GET, "/swagger-ui").permitAll();
+                    req.requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll();
+                    req.requestMatchers(HttpMethod.GET, "/v3/api-docs").permitAll();
+                    req.requestMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/usuarios/upload").hasRole("ADMIN");
+                    req.requestMatchers(HttpMethod.GET, "/usuarios/listar").hasRole("ADMIN");
+                    req.requestMatchers(HttpMethod.GET, "/contas/listar").hasRole("ADMIN");
+                    req.requestMatchers(HttpMethod.GET, "/transacoes/listar").hasRole("ADMIN");
                     req.requestMatchers(HttpMethod.GET, "/transacoes/resumo").hasRole("ADMIN");
                     req.anyRequest().authenticated();
                 }).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
