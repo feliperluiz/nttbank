@@ -20,7 +20,7 @@ public class CurrencyConverterService {
         return amountInBRL.multiply(new BigDecimal(exchangeRate)).setScale(2, RoundingMode.HALF_UP);
     }
 
-    private Double retornaTaxaDeCambio(String targetCurrency) {
+    public Double retornaTaxaDeCambio(String targetCurrency) {
         RestTemplate restTemplate = new RestTemplate();
 
         String url = String.format("%s/%s", apiUrl, "BRL");

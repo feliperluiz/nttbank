@@ -1,5 +1,6 @@
 package com.nttdata.nttbank.infra.controller;
 
+import com.nttdata.nttbank.infra.gateways.external.CurrencyConverterService;
 import com.nttdata.nttbank.infra.gateways.external.MockAPIService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,8 @@ public class MockAPIController {
 
     private final MockAPIService mockAPIService;
 
+    private final CurrencyConverterService currencyConverterService;
+
     @GetMapping("/saldos")
     public ResponseEntity<List<LinkedHashMap<String,String>>> getSaldos() {
         List<LinkedHashMap<String, String>> saldos = mockAPIService.getSaldos();
@@ -29,7 +32,8 @@ public class MockAPIController {
     @GetMapping("/transacoes")
     public ResponseEntity<List<LinkedHashMap<String, String>>> getTransacoes() {
         List<LinkedHashMap<String, String>> transacoes = mockAPIService.getTransacoes();
-        //TODO colocar a taxa de cambio
+        transacoes.get(0).put("Câmbio USD", String.valueOf(currencyConverterService.retornaTaxaDeCambio("USD")));
+        transacoes.get(0).put("Câmbio EUR", String.valueOf(currencyConverterService.retornaTaxaDeCambio("EUR")));
         if (transacoes == null) {
             return ResponseEntity.notFound().build();
         }
