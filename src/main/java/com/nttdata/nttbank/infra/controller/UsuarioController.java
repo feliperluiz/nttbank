@@ -4,6 +4,7 @@ import com.nttdata.nttbank.application.usecases.usuario.*;
 import com.nttdata.nttbank.domain.entities.Usuario;
 import com.nttdata.nttbank.infra.controller.dto.UsuarioDto;
 import com.nttdata.nttbank.infra.controller.dto.UsuarioRespDto;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@SecurityRequirement(name = "bearer-key")
 @RequestMapping("/usuarios")
 public class UsuarioController {
 

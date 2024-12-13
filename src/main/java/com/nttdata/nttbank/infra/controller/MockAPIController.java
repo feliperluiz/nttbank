@@ -2,6 +2,7 @@ package com.nttdata.nttbank.infra.controller;
 
 import com.nttdata.nttbank.infra.gateways.external.CurrencyConverterService;
 import com.nttdata.nttbank.infra.gateways.external.MockAPIService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@SecurityRequirement(name = "bearer-key")
 @RequestMapping("/api")
 public class MockAPIController {
 

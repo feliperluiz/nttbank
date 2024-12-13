@@ -6,6 +6,7 @@ import com.nttdata.nttbank.application.usecases.conta.ListarContas;
 import com.nttdata.nttbank.application.usecases.conta.RemoverConta;
 import com.nttdata.nttbank.domain.entities.Conta;
 import com.nttdata.nttbank.infra.controller.dto.ContaDto;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/contas")
+@SecurityRequirement(name = "bearer-key")
 public class ContaController {
 
     @Autowired

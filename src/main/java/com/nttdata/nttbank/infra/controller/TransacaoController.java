@@ -4,6 +4,7 @@ import com.nttdata.nttbank.application.usecases.transacao.*;
 import com.nttdata.nttbank.domain.entities.RelatorioTransacao;
 import com.nttdata.nttbank.domain.entities.Transacao;
 import com.nttdata.nttbank.infra.controller.dto.TransacaoDto;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@SecurityRequirement(name = "bearer-key")
 @RequestMapping("/transacoes")
 public class TransacaoController {
 
