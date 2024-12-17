@@ -6,7 +6,6 @@ import com.nttdata.nttbank.infra.persistence.entities.UsuarioEntity;
 import com.nttdata.nttbank.infra.persistence.enums.TipoConta;
 import com.nttdata.nttbank.infra.persistence.enums.TipoDespesa;
 import com.nttdata.nttbank.infra.persistence.enums.TipoOperacao;
-import org.hibernate.validator.constraints.br.CPF;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,11 +17,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 @DataJpaTest
-class TransacaoRepositoryTest {
+public class TransacaoRepositoryTest {
 
     @Autowired
     private TestEntityManager testEntityManager;
