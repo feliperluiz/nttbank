@@ -20,15 +20,11 @@ public class SpringDocConfigurations {
                                 new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")))
 
                 .info(new Info()
-                        .title("Voll.med API")
+                        .title("NTT Bank")
                         .description("API Rest para cadastros, informações, atualizações e remoções de usuários, contas e transações bancárias do NTT Bank")
                         .contact(new Contact()
                                 .name("Felipe Rodrigues Luiz")
-                                .email("lippee@gmail.com"))
-                        .license(new License()
-                                .name("Apache 2.0")
-                                .url("http://voll.med/api/licenca")));
-
+                                .email("lippee@gmail.com")));
 
     }
 }
