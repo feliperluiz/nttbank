@@ -39,6 +39,16 @@ public class TransacaoConfig {
     }
 
     @Bean
+    ResumoPdf resumoPdf(RepositorioDeTransacao repositorioDeTransacao){
+        return new ResumoPdf(repositorioDeTransacao);
+    }
+
+    @Bean
+    GraficoDespesas graficoDespesas(RepositorioDeTransacao repositorioDeTransacao){
+        return new GraficoDespesas(repositorioDeTransacao);
+    }
+
+    @Bean
     RepositorioDeTransacaoJpa criarRepositorioTransacao(TransacaoRepository repositorio, ContaRepository contaRepository, TransacaoEntityMapper mapper, CurrencyConverterService currencyConverterService){
         return new RepositorioDeTransacaoJpa(repositorio, contaRepository, mapper, currencyConverterService);
     }

@@ -39,6 +39,12 @@ public class TransacaoController {
     @Autowired
     private ResumoDespesas resumoDespesas;
 
+    @Autowired
+    private GraficoDespesas graficoDespesas;
+
+    @Autowired
+    private ResumoPdf resumoPdf;
+
     @PostMapping("/criar")
     public ResponseEntity<TransacaoDto> criarTransacao(@RequestBody @Valid TransacaoDto dto) {
         Transacao salvo = criarTransacao.criarTransacao(new Transacao(null, dto.contaId(), dto.valor(), dto.descricao(), dto.tipoOperacao(), dto.contaIdTransferencia(), dto.tipoDespesa()));
@@ -72,7 +78,7 @@ public class TransacaoController {
 
     @GetMapping("/resumo")
     public ResponseEntity<byte[]> resumoPdf() {
-        byte[] pdf = resumoDespesas.resumoPdf();
+        byte[] pdf = resumoPdf.resumoPdf();
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "inline; filename=resumo-transacoes.pdf");
@@ -82,7 +88,7 @@ public class TransacaoController {
 
     @GetMapping(value = "/grafico/{cpf}", produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] graficoDespesas(@PathVariable("cpf") String cpf) throws IOException {
-        resumoDespesas.graficoDespesas(cpf);
+        graficoDespesas.graficoDespesas(cpf);
         File barChartFile = new File("grafico_despesas.png");
         return Files.readAllBytes(barChartFile.toPath());
     }

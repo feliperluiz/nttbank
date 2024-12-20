@@ -17,12 +17,7 @@ public class ResumoDespesas {
         return repositorio.resumoDespesas(cpf);
     }
 
-    public void graficoDespesas(String cpf) {
-        repositorio.graficoDespesas(cpf);
-    }
 
-    public byte[] resumoPdf() {
-        return repositorio.resumoPdf();
-    }
+
 
 }
