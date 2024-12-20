@@ -31,9 +31,12 @@ API Exchange Rates v4: API para obter taxas de câmbio de várias moedas em temp
 Usuario - Representa um usuario do sistema
 Conta - Representa uma conta de um usuário, que pode ter "n" contas
 Transacao - Representa uma transação de uma conta de um usuário. Quando o campo idContaTransferencia é diferente de null, significa um registro de transferência entre contas.
+RelatorioTransacao - Representa os dados para retorno do resumo das despesas (filtrado por cpf) e para o gráfico de transações que é agrupado por tipo da despesa (também filtrado por cpf).
 
 ## INSTRUÇÕES PARA EXECUÇÃO
 
-- Executar Docker Desktop em máquina local - versão 4.36.0
-- Executar o projeto a partir da classe NttbankApplication.java
+- Instalar e executar o Docker Desktop em máquina local - https://www.docker.com/products/docker-desktop/ - versão 4.36.0
+- Download do projeto: https://github.com/feliperluiz/nttbank/archive/refs/heads/feature/hello-world.zip
+- Na raiz do projeto, executar o seguinte comando:
+a) docker-compose up --build
 - Criar um Usuario, uma Conta para este Usuario e uma Transacao para esta Conta
