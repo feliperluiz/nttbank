@@ -3,14 +3,14 @@
 ## Tecnologias / Arquitetura
 
 - **Java 23**: Última versão estável do Java, com melhorias de performance e novos recursos.
-- **Spring Boot 3.4.0-RC1**: Framework para construção de aplicações Java com configurações automáticas e simplificadas.
-- **Spring Web 3.4.0-RC1**: Módulo do Spring Boot para desenvolvimento de aplicações web, incluindo RESTful APIs.
-- **Spring Data JPA 3.4.0-RC1**: Facilita o acesso a bancos de dados relacionais usando JPA (Java Persistence API).
-- **Spring Docker Compose 3.4.0-RC1**: Integração com Docker Compose para facilitar a execução de aplicações Spring Boot em containers.
-- **Spring Test 3.4.0-RC1**: Ferramentas para realizar testes de integração e unitários com Spring.
-- **Spring Security 3.4.0-RC1**: Framework de segurança para autenticação, autorização e proteção contra ataques.
-- **Spring Security Test 3.4.0-RC1**: Suporte para testar funcionalidades de segurança em aplicações Spring.
-- **Spring Validation 3.4.0-RC1**: Ferramentas para validação de dados e objetos em Spring.
+- **Spring Boot 3.4.0**: Framework para construção de aplicações Java com configurações automáticas e simplificadas.
+- **Spring Web 3.4.0**: Módulo do Spring Boot para desenvolvimento de aplicações web, incluindo RESTful APIs.
+- **Spring Data JPA 3.4.0**: Facilita o acesso a bancos de dados relacionais usando JPA (Java Persistence API).
+- **Spring Docker Compose 3.4.0**: Integração com Docker Compose para facilitar a execução de aplicações Spring Boot em containers.
+- **Spring Test 3.4.0**: Ferramentas para realizar testes de integração e unitários com Spring.
+- **Spring Security 3.4.0**: Framework de segurança para autenticação, autorização e proteção contra ataques.
+- **Spring Security Test 3.4.0**: Suporte para testar funcionalidades de segurança em aplicações Spring.
+- **Spring Validation 3.4.0**: Ferramentas para validação de dados e objetos em Spring.
 - **Spring DOC OpenAPI WebMVC 2.7.0**: Geração automática de documentação OpenAPI para APIs Spring com integração Swagger.
 - **PostgreSQL 17.0**: Banco de dados relacional de código aberto, altamente escalável e robusto.
 - **H2 Database**: Banco de dados em memória, ideal para testes e desenvolvimento rápido.
@@ -75,15 +75,15 @@
 - Cadastro, listagem, alteração e exclusão de transações de contas;
 - Resumo de transações em formato PDF retornando identificador, nome do usuário, agência/conta/dac do responsável, agência/conta/dac da conta origem/destino (caso for transferência), valor, descrição, tipo da operação (crédito ou débito) e tipo da despesa (alimentação, saúde, lazer, educação, moradia, casa, vestuário);
 - Resumo de despesas (transações do tipo débito) de um usuário (filtrado pro cpf), onde é retornado o nome do usuário, o identificador da conta bancária da despesa, o valor da transação, a descrição, o tipo de despesa e o tipo de operação (que será débito por se tratar de uma despesa).
-- Gráfico de despesas, filtrado por cpf, onde retorna um gráfico de "pizza" numa imagem em formato png. O gráfico soma os valores das despesas para cada tipo de despesa (alimentação, saúde, lazer, educação, moradia, casa, vestuário), ou seja, é um gráfico soma despesas x tipo.
+- Gráfico de despesas, filtrado por cpf, onde retorna um gráfico de barras numa imagem em formato png. O gráfico soma os valores das transações para cada tipo de despesa (alimentação, saúde, lazer, educação, moradia, casa, vestuário), ou seja, é um gráfico soma despesas x tipo.
 
 **Importante!**
 
 - No cadastro de usuário, deve-se cadastrar um login, senha e a autorização "role", desse usuário, podendo ser USER ou ADMIN.
-- Na aplicação o usuário com autorização do tipo USER pode realizar todas as chamadas da API REST, exceto as que são exclusivas do ADMIN, que são:
-    - Criação de usuários e upload de usuários via Excel (aqui antes de criar essa regra foi criado um usuário ADMIN para possibilitar os cadastros)
-    - Listagem de usuários, contas e transações;
-    - Resumo de transações em formato PDF; 
+- Na aplicação o usuário com autorização do tipo USER pode realizar todas as chamadas da API REST, exceto as que são exclusivas do ADMIN, que são as chamadas onde se obtém informações de N usuários:
+  - Upload de usuários via Excel
+  - Listagem de usuários, contas e transações;
+  - Resumo de transações em formato PDF; 
 - Todas as rotas são autenticadas, ou seja, deve-se chamar o /login para obter um Token JWT e nas chamadas seguintes, passá-lo como Header no formato Bearer Authentication.
 
 
